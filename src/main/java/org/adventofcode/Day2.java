@@ -26,11 +26,41 @@ public class Day2 {
         }
     }
 
+    public List<Map<Colour, Integer>> getMinimumCubesList() {
+        try (var lines = Files.lines(Paths.get(filePathString))) {
+            return getMinimumCubesList(lines);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public int calculatePowers(List<Map<Colour, Integer>> minimumCubes) {
+        return minimumCubes.stream().map(cubes -> cubes.values().stream().reduce(1, (a, b) -> a * b)).reduce(0, Integer::sum);
+    }
+
     public int sumGameLines(Stream<String> lines, Map<Colour, Integer> cubes) {
         return lines.map(Game::parseGameLine)
                 .filter(game -> isPossibleGame(game, cubes))
                 .map(Game::getGameId)
                 .reduce(0, Integer::sum);
+    }
+
+    public List<Map<Colour, Integer>> getMinimumCubesList(Stream<String> lines) {
+        List<Map<Colour, Integer>> minimumCubes = new ArrayList<>();
+        lines.map(Game::parseGameLine)
+                .forEach(game -> {
+                    Map<Colour, Integer> minimumCube = new EnumMap<>(Colour.class);
+                    game.rounds.forEach(round -> round.forEach((colour, amount) -> {
+                        if (minimumCube.containsKey(colour)) {
+                            minimumCube.put(colour, Math.max(minimumCube.get(colour), amount));
+                        } else {
+                            minimumCube.put(colour, amount);
+                        }
+                    }));
+                    minimumCubes.add(minimumCube);
+                });
+        return minimumCubes;
     }
 
     private boolean isPossibleGame(Game game, Map<Colour, Integer> cubes) {
