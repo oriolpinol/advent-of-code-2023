@@ -33,4 +33,14 @@ class Day4Test {
     void totalPointsFileTest() {
         assertEquals(25571, Day4.totalPoints(Path.of("src/main/resources/day4.txt")));
     }
+
+    @Test
+    void totalCardsTest() {
+        assertEquals(30L, Day4.totalCards(lines));
+    }
+
+    @Test
+    void totalCardsFileTest() {
+        assertEquals(8805731L, Day4.totalCards(Path.of("src/main/resources/day4.txt")));
+    }
 }
