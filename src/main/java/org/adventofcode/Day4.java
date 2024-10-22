@@ -13,6 +13,7 @@ public class Day4 {
 
 
     private Day4() {
+        HELLO I AM WOKRING REALLY HARD
     }
 
     public static long totalCards(Stream<String> lines) {
